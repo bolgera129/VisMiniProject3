@@ -130,7 +130,7 @@ export default function MapChart(container, data, world) {
                         }
                     })
                 
-                d3.select('#map-tooltip').style('display', 'block')
+                d3.select('#map-tooltip').classed("hidden", false)
 
                 d3.select(event.currentTarget)
                     .transition()
@@ -149,7 +149,7 @@ export default function MapChart(container, data, world) {
                         else return colorScale(d.properties.Value)
                         })
 
-                d3.select('#map-tooltip').style('display', 'none')
+                d3.select("#map-tooltip").classed("hidden", true)
             })
             .on("click", (event, d) => clicked(d))
     }

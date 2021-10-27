@@ -36,19 +36,25 @@ svg {
     border: 2px solid midnightblue;
 }
 
-.tooltip {
-    position: fixed;
-    display: none;
-    width: 300px;
+#map-tooltip {
+    position: absolute;
+    width: 300;
     height: auto;
     padding: 10px;
-    background-color: black;
     color: white;
-    opacity: 85%;
+    background-color: black;
+    opacity: 0.8;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    font-size: 12px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+}
+
+#map-tooltip.hidden {
+    display: none;
 }
 
 .form-control {
