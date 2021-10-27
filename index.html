@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
     <link rel="stylesheet" href="./style.css">
 
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.1.1/d3.min.js"></script>
+    <script src="https://unpkg.com/topojson@3"></script>
+    <script defer src="main.js" defer type="module"></script>
+
 
 </head>
 <body>
@@ -19,16 +23,28 @@
             <h1>
                 Threatened Species Over Time
             </h1>
-            <h6>
+            <h4>
                 Christina Mackenzie, Grace Myers, Anna Bolger
-            </h6>
-            
+            </h4>
             <a class="button" href="./about.html"> About </a>
-
+            <p><strong>Click on any country below or zoom in on the map to learn more!</strong></p>
+            <div class = "year-dropdown">
+                <p class = "select-year">Select Year:</p>
+                <select id = "year" class = "form-control">
+                    <option value = "2004">2004</option>
+                    <option value = "2010">2010</option>
+                    <option value = "2016">2016</option>
+                    <option value = "2017">2017</option>
+                    <option value = "2018">2018</option>
+                    <option value = "2019">2019</option>
+                    <option value = "2020">2020</option>
+                </select>
+            </div>
+            <button class = "button button-outline" id = "zoom">Reset Zoom</button>
         </div>        
         <div class = "viz-container">
             <div class = "map">
-
+                <div id = "map-tooltip" class = "tooltip"></div>
             </div>
             <div class = "line-chart">
 

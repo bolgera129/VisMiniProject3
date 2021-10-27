@@ -1,5 +1,81 @@
 .title {
     width: 100%;
     text-align: center;
-    padding: 5%;
+    padding: 10px;
+    margin: 25px;
+}
+
+body {
+    background-color: whitesmoke;
+}
+
+h1 {
+    text-align: center;
+    font-weight: bold;
+    background-color: lightblue;
+    padding: 10px;
+    margin: 20px;
+    margin-top: 5px;
+    border: 2px solid dimgrey;
+}
+
+body {
+    margin: 20px;
+    padding: 20px;
+    font-family: "Times New Roman", Times, serif;
+}
+
+svg {
+    background-color: white;
+}
+
+.svg-map {
+    display: block;
+    margin: auto;
+    margin-bottom: 10px;
+    border: 2px solid midnightblue;
+}
+
+.tooltip {
+    position: fixed;
+    display: none;
+    width: 300px;
+    height: auto;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    opacity: 85%;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.form-control {
+    text-align: center;
+    width: 15%;
+}
+
+.select-year {
+    margin: 5px;
+    font-weight: bolder;
+}
+
+.button.button-outline {
+    color: teal;
+    background-color: white;
+}
+
+.button {
+    border: 0.1rem solid teal;
+    background-color: teal;
+}
+
+p {
+    margin: 20px
+}
+
+select {
+    background-color: white;
+    border: 0.1rem solid grey;
 }
