@@ -13,7 +13,6 @@ export default function MapChart(container, data, world) {
         .attr("class", "svg-map")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-        .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.right})`)
 
     // Data Set Manipulation
@@ -57,14 +56,15 @@ export default function MapChart(container, data, world) {
     // Zoom
     const zoom = d3.zoom()
         .scaleExtent([1, 8])
+        .translateExtent([[0, 0], [width, height]])
         .on("zoom", (event, d) => zoomed(event))
-
-    svg.call(zoom)
 
     function zoomed(event) {
         svg.selectAll("path")
             .attr("transform", event.transform)
     }
+
+    svg.call(zoom)
 
     // Click listener and click function
     const listeners = {"click": null}
@@ -79,8 +79,6 @@ export default function MapChart(container, data, world) {
             .duration(750)
             .call(zoom.transform, d3.zoomIdentity)
     })
-
-
 
     function update(data, year) {
         // Filter Data Set
