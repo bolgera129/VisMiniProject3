@@ -113,10 +113,11 @@ export default function MapChart(container, data, world) {
             .on("mouseenter", (event, d) => {
                 
                 let pos = d3.pointer(event, window)
+                console.log(pos)
     
                 d3.select("#map-tooltip")
-                    .style('left', pos[0] + "px")
-                    .style('top', pos[1] + "px")
+                    .style('left', pos[0] - 100 + "px")
+                    .style('top', pos[1] - 100 + "px")
                     .html(() => {
                         if (d.properties.Value === null) {
                             return `Country: ${d.properties.name} <br>
