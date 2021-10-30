@@ -113,7 +113,6 @@ export default function MapChart(container, data, world) {
             .on("mouseenter", (event, d) => {
                 
                 let pos = d3.pointer(event, window)
-                console.log(pos)
     
                 d3.select("#map-tooltip")
                     .style('left', pos[0] + "px")
