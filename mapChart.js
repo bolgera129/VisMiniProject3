@@ -104,29 +104,31 @@ export default function MapChart(container, data, world) {
         }
         
         // Update coloring, tooltips
-        map.attr("fill", d => {
+        map.transition()
+            .attr("fill", d => {
             if (remainder.includes(d.properties.name)) {
                 return "Grey"
             }
             else return colorScale(d.properties.Value)
             })
-            .on("mouseenter", (event, d) => {
-                
-                let pos = d3.pointer(event, window)
-    
-                d3.select("#map-tooltip")
-                    .style('left', pos[0] + "px")
-                    .style('top', pos[1] + "px")
-                    .html(() => {
-                        if (d.properties.Value === null) {
-                            return `Country: ${d.properties.name} <br>
-                            Total Threatened Species: N/A <br>`
-                        }
-                        else {
-                            return `Country: ${d.properties.name} <br>
-                            Total Threatened Species: ${d3.format(",")(d.properties.Value)} <br>`
-                        }
-                    })
+            
+        map.on("mouseenter", (event, d) => {
+            
+            let pos = d3.pointer(event, window)
+
+            d3.select("#map-tooltip")
+                .style('left', pos[0] + "px")
+                .style('top', pos[1] + "px")
+                .html(() => {
+                    if (d.properties.Value === null) {
+                        return `Country: ${d.properties.name} <br>
+                        Total Threatened Species: N/A <br>`
+                    }
+                    else {
+                        return `Country: ${d.properties.name} <br>
+                        Total Threatened Species: ${d3.format(",")(d.properties.Value)} <br>`
+                    }
+                })
                 
                 d3.select('#map-tooltip').classed("hidden", false)
 
