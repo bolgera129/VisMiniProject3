@@ -85,7 +85,9 @@ export default function BarChart(container) {
       
       bars.exit().remove();
 
-      bars.on("mouseover", function(event, d) {
+      const tooltip_bars = svg.selectAll("rect")
+
+      tooltip_bars.on("mouseover", function(event, d) {
         const pos = d3.pointer(event, window);
         d3.select("#bar-tooltip")
             .style("left", pos[0] + "px")
