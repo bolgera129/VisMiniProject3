@@ -51,6 +51,13 @@ export default function BarChart(container) {
     .attr("text-anchor", "middle")
     .attr("font-weight", "bold")
 
+  // Click listener and click function
+  const listeners = {"click": null}
+
+  function clicked(d) {
+      listeners["click"](d.Series)
+  }
+
   function update(data, year, country) {
 
     if (country != null) 
@@ -67,7 +74,7 @@ export default function BarChart(container) {
 
       heading.text("Threatened Species in " + country + " in " + year)
           
-      const bars = svg.selectAll("rect") 
+      var bars = svg.selectAll("rect") 
         .data(filteredData)
 
       bars
@@ -85,24 +92,44 @@ export default function BarChart(container) {
       
       bars.exit().remove();
 
-      const tooltip_bars = svg.selectAll("rect")
+      bars = svg.selectAll("rect")
 
-      tooltip_bars.on("mouseover", function(event, d) {
+      bars.on("mouseover", function(event, d) {
+
         const pos = d3.pointer(event, window);
+
         d3.select("#bar-tooltip")
             .style("left", pos[0] + "px")
             .style("top", pos[1] + "px")
           .select("#value")
           .html(d.Value + " Threatened " + d.Series.substring(20,((d.Series.length) - 9)))      
         d3.select("#bar-tooltip").classed("hidden", false);
+
+        d3.select(event.currentTarget)
+                    .transition()
+                    .duration(100)
+                    .attr("fill", "lightcoral")
+
       })
-      .on("mouseout", function(d) {
+      .on("mouseout", function(event, d) {
+
         d3.select("#bar-tooltip").classed("hidden", true);
-      });
+
+        d3.select(event.currentTarget)
+                    .transition()
+                    .duration(100)
+                    .attr("fill", "lightblue")
+      })
+      .on("click", (event, d) => clicked(d))
     }
   }
 
+    function on(event, listener) {
+      listeners[event] = listener
+    };
+
   return {
-    update
+    update,
+    on
   }
 }
