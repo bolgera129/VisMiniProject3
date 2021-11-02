@@ -1,4 +1,5 @@
 import MapChart from './mapChart.js';
+import barChart from './species_chart.js';
 
 d3.csv("Threatened_species.csv", d3.autoType).then(data => {
     d3.json("world-110m.json", d3.autoType).then(world => {
@@ -12,10 +13,13 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
         selection.onchange = () => {
             mapChart.update(data, selection.value)
             }
-
+        
+        
         // Update other charts when country is clicked on map
         mapChart.on("click", (country) => {
-            console.log(country)
+            const BarChart = barChart(".bar-chart", selection.value, country, data)
+            
         })
     })
+
 })
