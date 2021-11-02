@@ -17,6 +17,7 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
         
         // Update other charts when country is clicked on map
         mapChart.on("click", (country) => {
+            
             const BarChart = barChart(".bar-chart", selection.value, country, data)
             
         })

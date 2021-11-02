@@ -20,7 +20,7 @@ h1 {
 }
 
 body {
-    margin: 20px;
+    margin: 5px;
     padding: 20px;
     font-family: "Times New Roman", Times, serif;
 }
@@ -36,6 +36,15 @@ svg {
     border: 2px solid midnightblue;
 }
 
+.svg-bar {
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    border: 2px solid midnightblue;
+    background-color: white;
+}
+
+
 #map-tooltip {
     position: absolute;
     width: auto;
@@ -49,6 +58,21 @@ svg {
     -moz-border-radius: 10px;
     border-radius: 10px;
     pointer-events: none;
+}
+#bar-tooltip {
+    position: absolute;
+    width: auto;
+    height: auto;
+    padding: 0px;
+    font-size: 12px;
+    color: white;
+    background-color: black;
+    opacity: 0.8;
+    border-radius: 10px;
+    pointer-events: none;
+}
+#bar-tooltip.hidden {
+    display: none;
 }
 
 #map-tooltip.hidden {
