@@ -12,8 +12,9 @@ export default function barChart(container, year, country, data) {
 
     const xScale = d3.scaleBand().domain(filteredData.map(function(d) {return d.Series.substring(20,((d.Series.length) - 9));})).range([0, width]);
     const yScale = d3.scaleLinear().domain([0, parseFloat(d3.max(filteredData, d=>d.Value))]).range([height, 0]);
- 
+  
     d3.select('#svg-bar').remove();
+    
 
     const xAxis = d3.axisBottom().scale(xScale)
     const yAxis = d3.axisLeft().scale(yScale); 
@@ -62,10 +63,9 @@ svg.append("text")
         .text("Threatened Species in " + country + " in " + year)
         
 
+  const bars = svg.selectAll(".bar") .data(filteredData)
   
-   
-  svg.selectAll(".bar")
-    .data(filteredData)
+  bars
     .enter()
     .append("rect")
     .attr("class", "bar")
@@ -88,7 +88,7 @@ svg.append("text")
       d3.select("#bar-tooltip").classed("hidden", true);
     });
 
-
-
+    
+    bars.exit().remove();
 
 }
