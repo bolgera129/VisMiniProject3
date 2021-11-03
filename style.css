@@ -44,6 +44,15 @@ svg {
     background-color: white;
 }
 
+.svg-line {
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    border: 2px solid midnightblue;
+    background-color: white;
+}
+
+
 
 #map-tooltip {
     position: absolute;

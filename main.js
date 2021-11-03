@@ -10,7 +10,7 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
         mapChart.update(data, 2004)
 
         const barChart = BarChart(".bar-chart")
-        const lineChart = LineChart(".line-chart")
+        const lineChart = LineChart(".line-chart", data)
 
         let selection = document.getElementById('year')
         let country = null
