@@ -135,3 +135,11 @@ h4 {
 .myrec{
     border-radius: 2px;
 }
+
+.text{
+    text-align: center;
+}
+
+.center{
+    justify-content: center;
+}

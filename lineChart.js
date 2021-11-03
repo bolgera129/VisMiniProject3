@@ -19,16 +19,17 @@ export default function LineChart(container,data) {
 
     var parseTime = d3.timeParse("%Y");
 
-    var years =[];
+    var years = new Set();
     var series = new Set();
     for (let obj of data) {
-        years.push(d3.timeFormat("%Y")(parseTime(obj.Year)));
+        years.add(d3.timeFormat("%Y")(parseTime(obj.Year)));
         series.add(obj.Series);
     }
 
+    const years_arr = [...years]
 
 
-    const xScale = d3.scaleTime()
+    const xScale = d3.scaleLinear()
         .range([0, width])
 
         const yScale = d3.scaleLinear()
@@ -86,7 +87,6 @@ export default function LineChart(container,data) {
         const filteredData = data.filter(d => d.Country === country)
         filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
         filteredData.forEach(d => d.Value = parseFloat(d.Value))
-        console.log(filteredData)
 
         xScale.domain(d3.extent(filteredData, d=>d.Year))
         yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
@@ -102,7 +102,6 @@ export default function LineChart(container,data) {
         heading.text("Threatened Species in " + country)
 
         const sumstat = d3.group(filteredData, d => d.Series);
-        console.log(sumstat)
         const color = d3.scaleOrdinal()
         .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
     
@@ -122,6 +121,82 @@ export default function LineChart(container,data) {
             .y(function(d) { return yScale(+d.Value) + (margin.top +15) })
             (d[1])
         })
+      
+      svg.append('rect')
+        .data(filteredData)
+        .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .attr('opacity',0)
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout)
+        .on("mousemove", mousemove);
+      
+      function mouseover() {
+        d3.selectAll('.points text').style("display", null);
+      }
+      function mouseout(e) {
+        d3.selectAll('.points text').style("display", "none");
+        d3.selectAll(".tt").remove()
+      }
+      function mousemove(e) {
+        d3.selectAll(".vline").remove()
+        d3.selectAll(".tt").remove()
+
+        var bisectYear = d3.bisector(function(d) { return d})
+        var point = d3.pointer(e,svg.node());
+        const pointX = ((point[0]-90)/width*(2020-2004) +2004)
+        const year_i = bisectYear.left(years_arr,pointX)
+        const year = years_arr[year_i]
+
+        svg.append("line")
+        .attr("x1", xScale(year))
+        .attr("y1", 0)
+        .attr("x2", xScale(year))
+        .attr("y2", height)
+        .style("stroke-width", 1)
+        .style("stroke", "black")
+        .attr("class", "vline")
+        .style("fill", "none")
+        .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
+
+        svg
+        .append("rect")
+        .attr("width", 100)
+        .attr("height", 70)
+        .attr("class", "tt")
+        .attr("fill", "black")
+        .attr("opacity", .75)
+        .attr("rx", 6)
+        .attr("ry", 6)
+        .attr("x", (point[0] + 15))
+        .attr("y", (point[1] - 105))
+        var tt_data = filteredData.filter(d => d.Year == year)
+
+        svg.selectAll("#line-tooltip")
+        .data(tt_data)
+        .enter()
+        .append("text")
+        .attr("class", "tt")
+        .attr("x", (point[0] + 20))
+        .attr("y", (d,i) => ((point[1] - 80 + 12*i)))
+        .html((d,i) => `${d.Series.substring(20,((d.Series.length) - 9))}: ${d.Value}`)
+        .style("font-size", "10px")
+        .style("fill", "white")
+
+        svg.append("text")
+        .attr("class", "tt")
+        .attr("x", (point[0] + 20))
+        .attr("y", ((point[1] - 92)))
+        .html(`Year: ${year}`)
+        .style("font-size", "10px")
+        .style("fill", "white")
+      }
+      
+      
+      
+
 
       svg.selectAll("myrec")
         .data(sumstat)
@@ -157,7 +232,6 @@ export default function LineChart(container,data) {
           .style("fill", function(d,i){ return color(d[0])})
           .style("font-size", "10px")
           .text(function(d){ 
-            console.log(d[0])
             return d[0].substring(20,((d[0].length) - 9))
           })
           .attr("text-anchor", "left")
@@ -170,11 +244,11 @@ export default function LineChart(container,data) {
         d3.selectAll(".remove").remove();
         d3.selectAll(".dots").remove();
         d3.selectAll(".labels").remove();
+        d3.selectAll(".tt").remove();
         if (type != null) {
             const filteredData = data.filter(d => d.Country === country && d.Series == type)
             filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
             filteredData.forEach(d => d.Value = parseFloat(d.Value))
-            console.log(filteredData)
     
             xScale.domain(d3.extent(filteredData, d=>d.Year));
             yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
@@ -185,10 +259,9 @@ export default function LineChart(container,data) {
             y_axis.transition()
               .call(yAxis)
       
-            heading.text("Threatened Species in " + country)
+            heading.text("Threatened " + `${type.substring(20,((type.length) - 9))} ${country} `)
     
             const sumstat = d3.group(filteredData, d => d.Series); // nest function allows to group the calculation per level of a factor
-            console.log(sumstat)
             const color = d3.scaleOrdinal()
             .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
         
@@ -208,7 +281,75 @@ export default function LineChart(container,data) {
                   .y(function(d) { return yScale(+d.Value) + (margin.top +15) })
                   (d[1])
               })
-    
+              svg.append('rect')
+              .data(filteredData)
+              .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
+              .attr("class", "overlay")
+              .attr("width", width)
+              .attr("height", height)
+              .attr('opacity',0)
+              .on("mouseover", mouseover)
+              .on("mouseout", mouseout)
+              .on("mousemove", mousemove);
+            
+            function mouseover() {
+              d3.selectAll('.points text').style("display", null);
+            }
+            function mouseout(e) {
+              d3.selectAll('.points text').style("display", "none");
+              d3.selectAll(".tt").remove()
+            }
+            function mousemove(e) {
+              d3.selectAll(".vline").remove()
+              d3.selectAll(".tt").remove()
+      
+              var bisectYear = d3.bisector(function(d) { return d})
+              var point = d3.pointer(e,svg.node());
+              const pointX = ((point[0]-90)/width*(2020-2004) +2004)
+              const year_i = bisectYear.left(years_arr,pointX)
+              const year = years_arr[year_i]
+      
+              svg.append("line")
+              .attr("x1", xScale(year))
+              .attr("y1", 0)
+              .attr("x2", xScale(year))
+              .attr("y2", height)
+              .style("stroke-width", 1)
+              .style("stroke", "black")
+              .attr("class", "vline")
+              .style("fill", "none")
+              .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
+      
+              svg
+              .append("rect")
+              .attr("width", 100)
+              .attr("height", 32)
+              .attr("class", "tt")
+              .attr("fill", "black")
+              .attr("opacity", .75)
+              .attr("x", (point[0] + 15))
+              .attr("y", (point[1] - 105))
+              var tt_data = filteredData.filter(d => d.Year == year)
+      
+              svg.selectAll("#line-tooltip")
+              .data(tt_data)
+              .enter()
+              .append("text")
+              .attr("class", "tt")
+              .attr("x", (point[0] + 20))
+              .attr("y", (d,i) => ((point[1] - 80 + 12*i)))
+              .html((d,i) => `${d.Series.substring(20,((d.Series.length) - 9))}: ${d.Value}`)
+              .style("font-size", "10px")
+              .style("fill", "white")
+      
+              svg.append("text")
+              .attr("class", "tt")
+              .attr("x", (point[0] + 20))
+              .attr("y", ((point[1] - 92)))
+              .html(`Year: ${year}`)
+              .style("font-size", "10px")
+              .style("fill", "white")
+            }
           }
     }
 
