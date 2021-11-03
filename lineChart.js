@@ -254,7 +254,7 @@ export default function LineChart(container,data) {
             y_axis.transition()
               .call(yAxis)
       
-            heading.text("Threatened " + `${type.substring(20,((type.length) - 9))} ${country} `)
+            heading.text("Threatened " + `${type.substring(20,((type.length) - 9))}` + " in " + `${country} `)
     
             const sumstat = d3.group(filteredData, d => d.Series); // nest function allows to group the calculation per level of a factor
             const color = d3.scaleOrdinal()
