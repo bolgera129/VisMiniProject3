@@ -84,7 +84,7 @@ export default function MapChart(container, data, world) {
         // Filter Data Set
         year = parseInt(year)
         let remainder = []
-        let filtered = data.filter(d => d.Series === "Threatened Species: Total (number)" && d.Year === year && countries.includes(d.Country))
+        let filtered = data.filter(d => d.Series == "Threatened Species: Total (number)" && d.Year == year && countries.includes(d.Country))
         let features = worldmap.features
 
         for (const feat of features) {
@@ -92,7 +92,7 @@ export default function MapChart(container, data, world) {
             var found = false
             for (const object of filtered) {
                 var data_country = object.Country
-                if (country === data_country) {
+                if (country == data_country) {
                     feat.properties.Value = object.Value
                     found = true
                 }

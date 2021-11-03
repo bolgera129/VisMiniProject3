@@ -3,7 +3,7 @@ export default function LineChart(container,data) {
     // Create SVG, scales, axes, etc.
 
     //create SVG
-    const margin = {top: 20, right: 20, bottom: 75, left: 100};
+    const margin = {top: 20, right: 85, bottom: 75, left: 100};
     const width = 550 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
@@ -71,13 +71,6 @@ export default function LineChart(container,data) {
     .attr("font-weight", "bold")
 
 
-    const listeners = {"click": null}
-
-    function clicked(d) {
-        listeners["click"](d.Series)
-    }  
-
-
     // Function that updates line chart to different country
     function updateCountry(data, country) {
         // Remove all previous lines from SVG and add one for the total species counts over time in given country
@@ -104,16 +97,17 @@ export default function LineChart(container,data) {
 
         const sumstat = d3.group(filteredData, d => d.Series);
         const color = d3.scaleOrdinal()
-        .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
+        .range(['hotpink','#984ea3', '#4daf4a', '#377eb8'])
     
 
     
       var lines = svg.selectAll(".line")
       .data(sumstat)
       .join("path")
+      .transition()
         .attr("class", "remove")
         .attr("fill", "none")
-        .attr("stroke", function(d){ return color(d[0]) })
+        .attr("stroke", function(d){return color(d[0]) })
         .attr("stroke-width", 1.5)
         .attr("data-legend",function(d) { return d.Series})
         .attr("d", function(d){
@@ -264,16 +258,25 @@ export default function LineChart(container,data) {
     
             const sumstat = d3.group(filteredData, d => d.Series); // nest function allows to group the calculation per level of a factor
             const color = d3.scaleOrdinal()
-            .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
+            .range(['hotpink','#377eb8','#4daf4a','#984ea3'])
         
-    
-          
             svg.selectAll(".line")
             .data(sumstat)
             .join("path")
+            .transition()
               .attr("class", "remove")
               .attr("fill", "none")
-              .attr("stroke", function(d){ return color(d[0]) })
+              .attr("stroke", function(d){ 
+                if (d[0] == "Threatened Species: Vertebrates (number)") {
+                  return 'hotpink'
+                } 
+                else if (d[0] == "Threatened Species: Invertebrates (number)") {
+                  return '#984ea3'
+                }
+                else if (d[0] == "Threatened Species: Plants (number)") {
+                  return '#4daf4a'
+                }
+                return color(d[0]) })
               .attr("stroke-width", 1.5)
               .attr("data-legend",function(d) { return d.Series})
               .attr("d", function(d){
