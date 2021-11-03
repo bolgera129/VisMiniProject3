@@ -18,6 +18,7 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
 
         //default the bar chart with Afganistan Data 
         barChart.update(data, 2004, "Afghanistan")
+        lineChart.updateCountry(data, "Afghanistan")
         
         // Listen for change in year dropdown, update map chart, bar chart if changed
         selection.onchange = () => {

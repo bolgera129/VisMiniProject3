@@ -3,8 +3,8 @@ export default function LineChart(container,data) {
     // Create SVG, scales, axes, etc.
 
     //create SVG
-    const margin = {top: 20, right: 20, bottom: 70, left: 75};
-    const width = 500 - margin.left - margin.right;
+    const margin = {top: 20, right: 20, bottom: 75, left: 100};
+    const width = 550 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
 
     const svg = d3
@@ -20,16 +20,24 @@ export default function LineChart(container,data) {
     var parseTime = d3.timeParse("%Y");
 
     var years = new Set();
+    var series = new Set();
     for (let obj of data) {
         years.add(parseTime(obj.Year));
+        series.add(obj.Series);
+    }
+    var formattedData = []
+    for (let s of series){
+        let t = data.filter(d => d.Series === s)
+        formattedData.push(t)
     }
 
+    console.log(formattedData)
 
     const xScale = d3.scaleTime()
         .range([0, width])
-        .domain(d3.extent(years));
     const yScale = d3.scaleLinear()
-        .range([height, 0]);    
+        .range([height, 0])
+
 
     const xAxis = d3.axisBottom().scale(xScale)
     const yAxis = d3.axisLeft().scale(yScale); 
@@ -54,7 +62,7 @@ export default function LineChart(container,data) {
 
   svg.append("text")             
     .attr("transform",
-          "translate(" + (width/2 + 60) + " ," + (height + margin.top + 50) + ")")
+          "translate(" + (width/2 + 60) + " ," + (height + margin.top + 60) + ")")
     .style("text-anchor", "middle")
     .text("Years");
 
@@ -77,10 +85,15 @@ export default function LineChart(container,data) {
     function updateCountry(data, country) {
         // Remove all previous lines from SVG and add one for the total species counts over time in given country
         if (country != null) {
-            const sumstat = d3.group(data, d => d.Series)
-            print(sumstat)
-  
-        yScale.domain([0, parseFloat(d3.max(data, d=>d.Value))])
+        const filteredData = data.filter(d => d.Country === country)
+        filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
+        filteredData.forEach(d => d.Value = parseFloat(d.Value))
+        console.log(filteredData)
+
+        xScale.domain(d3.extent(filteredData, d=>d.Year));
+        yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
+
+        // yScale.domain([0, parseFloat(d3.max(data, d=>d.Value))])
   
         x_axis.transition()
           .call(xAxis)
@@ -90,55 +103,29 @@ export default function LineChart(container,data) {
   
         heading.text("Threatened Species in " + country)
 
-        console.log
-            
-        var lines = svg.selectAll("line") 
-          .data(sumstat)
+        const sumstat = d3.group(filteredData, d => d.Series); // nest function allows to group the calculation per level of a factor
+        console.log(sumstat)
+        const color = d3.scaleOrdinal()
+        .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
+    
+
+      
+        svg.selectAll(".line")
+        .data(sumstat)
+        .join("path")
+          .attr("fill", "none")
+          .attr("stroke", function(d){ return color(d[0]) })
+          .attr("stroke-width", 1.5)
+          .attr("d", function(d){
+              console.log(d)
+            return d3.line()
+              .x(function(d) { return xScale(+d.Year) })
+              .y(function(d) { return yScale(+d.Value); })
+              (d[1])
+          })
+
   
-        lines
-            .join("path")
-            .attr("stroke",function(d){return "#377eb8"})
-            .attr("stroke-width", 1.5)
-            .attr("d", d => {
-                return d3.line()
-                  .x(d => xScale(d.Year))
-                  .y(d => yScale(d.Value))
-                  (d[1])
-              })
-          .attr("fill", "lightblue")
-          svg.append("path")
-        
-        lines.exit().remove();
-  
-        lines = svg.selectAll("line")
-  
-        lines.on("mouseover", function(event, d) {
-  
-          const pos = d3.pointer(event, window);
-  
-          d3.select("#line-tooltip")
-              .style("left", pos[0] + "px")
-              .style("top", pos[1] + "px")
-            .select("#value")
-            .html(d.Value + " Threatened ")      
-          d3.select("#line-tooltip").classed("hidden", false);
-  
-          d3.select(event.currentTarget)
-                      .transition()
-                      .duration(100)
-                      .attr("fill", "lightcoral")
-  
-        })
-        .on("mouseout", function(event, d) {
-  
-          d3.select("#line-tooltip").classed("hidden", true);
-  
-          d3.select(event.currentTarget)
-                      .transition()
-                      .duration(100)
-                      .attr("fill", "lightblue")
-        })
-        .on("click", (event, d) => clicked(d))
+
       }
     }
 
@@ -151,4 +138,7 @@ export default function LineChart(container,data) {
         updateCountry,
         updateType
     }
+
+    
 }
+
