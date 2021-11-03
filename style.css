@@ -1,12 +1,7 @@
 .title {
-    width: 100%;
     text-align: center;
     padding: 10px;
     margin: 25px;
-}
-
-body {
-    background-color: whitesmoke;
 }
 
 h1 {
@@ -20,6 +15,7 @@ h1 {
 }
 
 body {
+    background-color: whitesmoke;
     margin: 5px;
     padding: 20px;
     font-family: "Times New Roman", Times, serif;
@@ -116,4 +112,22 @@ p {
 select {
     background-color: white;
     border: 0.1rem solid grey;
+}
+
+#one{
+    margin: 10px; 
+    text-align: left;
+}
+h2 {
+    text-align: center;
+    color: darkgrey;
+    font-weight: bold;
+}
+
+h4 {
+    text-align: center;
+}
+
+.back-button {
+    text-align: center;
 }
