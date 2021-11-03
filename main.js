@@ -13,7 +13,7 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
         const lineChart = LineChart(".line-chart", data)
 
         let selection = document.getElementById('year')
-        let country = null
+        let country = "Afghanistan"
         let type = null
 
         //default the bar chart with Afganistan Data 
