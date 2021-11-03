@@ -36,7 +36,7 @@ export default function LineChart(container,data) {
         .range([height, 0])
 
 
-    const xAxis = d3.axisBottom().scale(xScale)
+    const xAxis = d3.axisBottom().scale(xScale).tickFormat(d3.format("d"))
     const yAxis = d3.axisLeft().scale(yScale); 
 
     const x_axis = svg.append("g")
@@ -88,6 +88,7 @@ export default function LineChart(container,data) {
         filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
         filteredData.forEach(d => d.Value = parseFloat(d.Value))
 
+       
         xScale.domain(d3.extent(filteredData, d=>d.Year))
         yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
 
