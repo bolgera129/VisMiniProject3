@@ -108,3 +108,13 @@ select {
     background-color: white;
     border: 0.1rem solid grey;
 }
+
+#one{
+    margin: 10px; 
+    text-align: left;
+}
+h2 {
+    text-align: center;
+    color: darkgrey;
+    font-weight: bold;
+}
