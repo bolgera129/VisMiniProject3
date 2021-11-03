@@ -162,11 +162,12 @@ export default function LineChart(container,data) {
         .attr("height", 70)
         .attr("class", "tt")
         .attr("fill", "black")
-        .attr("opacity", .75)
+        .attr("opacity", .8)
         .attr("rx", 6)
         .attr("ry", 6)
         .attr("x", (point[0] + 15))
         .attr("y", (point[1] - 105))
+        
         var tt_data = filteredData.filter(d => d.Year == year)
 
         svg.selectAll("#line-tooltip")
@@ -254,7 +255,7 @@ export default function LineChart(container,data) {
             y_axis.transition()
               .call(yAxis)
       
-            heading.text("Threatened " + `${type.substring(20,((type.length) - 9))}` + " in " + `${country} `)
+            heading.text("Threatened " + `${type.substring(20,((type.length) - 9))}` + "in" +`${country} `)
     
             const sumstat = d3.group(filteredData, d => d.Series); // nest function allows to group the calculation per level of a factor
             const color = d3.scaleOrdinal()
@@ -326,12 +327,15 @@ export default function LineChart(container,data) {
               svg
               .append("rect")
               .attr("width", 100)
-              .attr("height", 32)
+              .attr("height", 35)
               .attr("class", "tt")
               .attr("fill", "black")
-              .attr("opacity", .75)
+              .attr("opacity", .8)
+              .attr("rx", 6)
+              .attr("ry", 6)
               .attr("x", (point[0] + 15))
               .attr("y", (point[1] - 105))
+              
               var tt_data = filteredData.filter(d => d.Year == year)
       
               svg.selectAll("#line-tooltip")
