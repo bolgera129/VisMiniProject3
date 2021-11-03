@@ -19,28 +19,23 @@ export default function LineChart(container,data) {
 
     var parseTime = d3.timeParse("%Y");
 
-    var years = new Set();
+    var years =[];
     var series = new Set();
     for (let obj of data) {
-        years.add(parseTime(obj.Year));
+        years.push(d3.timeFormat("%Y")(parseTime(obj.Year)));
         series.add(obj.Series);
     }
-    var formattedData = []
-    for (let s of series){
-        let t = data.filter(d => d.Series === s)
-        formattedData.push(t)
-    }
 
-    console.log(formattedData)
+
 
     const xScale = d3.scaleTime()
         .range([0, width])
-    const yScale = d3.scaleLinear()
+
+        const yScale = d3.scaleLinear()
         .range([height, 0])
 
 
     const xAxis = d3.axisBottom().scale(xScale)
-    // .tickFormat(d3.timeFormat("%Y"));
     const yAxis = d3.axisLeft().scale(yScale); 
 
     const x_axis = svg.append("g")
@@ -112,29 +107,41 @@ export default function LineChart(container,data) {
         .range(['#e41a1c','#377eb8','#4daf4a','#984ea3'])
     
 
-      
-        var lines = svg.selectAll(".line")
-        .data(sumstat)
-        .join("path")
-          .attr("class", "remove")
-          .attr("fill", "none")
-          .attr("stroke", function(d){ return color(d[0]) })
-          .attr("stroke-width", 1.5)
-          .attr("data-legend",function(d) { return d.Series})
-          .attr("d", function(d){
-            return d3.line()
-              .x(function(d) { return xScale(d.Year) })
-              .y(function(d) { return yScale(+d.Value); })
-              (d[1])
-          })
+    
+      var lines = svg.selectAll(".line")
+      .data(sumstat)
+      .join("path")
+        .attr("class", "remove")
+        .attr("fill", "none")
+        .attr("stroke", function(d){ return color(d[0]) })
+        .attr("stroke-width", 1.5)
+        .attr("data-legend",function(d) { return d.Series})
+        .attr("d", function(d){
+          return d3.line()
+            .x(function(d) { return xScale(d.Year) + (margin.left - 10) })
+            .y(function(d) { return yScale(+d.Value) + (margin.top +15) })
+            (d[1])
+        })
 
-          var keys = ["hello", "Threatened Species: Vertebrates (number)", "blop", "drop"]
+      svg.selectAll("myrec")
+        .data(sumstat)
+        .enter()
+        .append("rect")
+        .attr("width", 75)
+        .attr("height",  65)
+        .attr("x", 465)
+        .attr("y", 15)
+        .attr("class", "myrec")
+        .style("fill","white")
+        .style("opacity",.5)
+
 
       svg.selectAll("mydots")
         .data(sumstat)
         .enter()
         .append("circle")
           .attr("cx", 475)
+          .attr('class', "dots")
           .attr("cy", function(d,i){ return 25 + i*15})
           .attr("r", 3)
           .style("fill", function(d){ return color(d[0])})
@@ -144,6 +151,7 @@ export default function LineChart(container,data) {
         .data(sumstat)
         .enter()
         .append("text")
+        .attr("class", "labels")
           .attr("x", 480)
           .attr("y", function(d,i){ return 27 + i*15})
           .style("fill", function(d,i){ return color(d[0])})
@@ -153,8 +161,6 @@ export default function LineChart(container,data) {
             return d[0].substring(20,((d[0].length) - 9))
           })
           .attr("text-anchor", "left")
-
-          
       }
     }
 
@@ -162,6 +168,8 @@ export default function LineChart(container,data) {
     function updateType(data, type, country) {
         // Remove whatever second line is already there (if any) and add one for particular type of species counts over time
         d3.selectAll(".remove").remove();
+        d3.selectAll(".dots").remove();
+        d3.selectAll(".labels").remove();
         if (type != null) {
             const filteredData = data.filter(d => d.Country === country && d.Series == type)
             filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
@@ -196,8 +204,8 @@ export default function LineChart(container,data) {
               .attr("data-legend",function(d) { return d.Series})
               .attr("d", function(d){
                 return d3.line()
-                  .x(function(d) { return xScale(d.Year) })
-                  .y(function(d) { return yScale(+d.Value); })
+                  .x(function(d) { return xScale(d.Year) + (margin.left - 10) })
+                  .y(function(d) { return yScale(+d.Value) + (margin.top +15) })
                   (d[1])
               })
     
