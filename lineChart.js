@@ -88,6 +88,7 @@ export default function LineChart(container,data) {
         filteredData.forEach(d => d.Value = parseFloat(d.Value))
         console.log(filteredData)
 
+       
         xScale.domain(d3.extent(filteredData, d=>d.Year))
         yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
 
@@ -176,6 +177,7 @@ export default function LineChart(container,data) {
             filteredData.forEach(d => d.Value = parseFloat(d.Value))
             console.log(filteredData)
     
+          
             xScale.domain(d3.extent(filteredData, d=>d.Year));
             yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
           
