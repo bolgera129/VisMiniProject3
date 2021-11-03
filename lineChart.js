@@ -19,23 +19,14 @@ export default function LineChart(container,data) {
 
     var parseTime = d3.timeParse("%Y");
 
-    var years =[];
-    var series = new Set();
-    for (let obj of data) {
-        years.push(d3.timeFormat("%Y")(parseTime(obj.Year)));
-        series.add(obj.Series);
-    }
-
-
-
-    const xScale = d3.scaleTime()
+    const xScale = d3.scaleLinear()
         .range([0, width])
 
         const yScale = d3.scaleLinear()
         .range([height, 0])
 
 
-    const xAxis = d3.axisBottom().scale(xScale)
+    const xAxis = d3.axisBottom().scale(xScale).tickFormat(d3.format("d"))
     const yAxis = d3.axisLeft().scale(yScale); 
 
     const x_axis = svg.append("g")
@@ -173,10 +164,10 @@ export default function LineChart(container,data) {
         d3.selectAll(".labels").remove();
         if (type != null) {
             const filteredData = data.filter(d => d.Country === country && d.Series == type)
-            filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
-            filteredData.forEach(d => d.Value = parseFloat(d.Value))
+            //filteredData.forEach(d => d.Year = d3.timeFormat("%Y")(parseTime(d.Year)))
+            //filteredData.forEach(d => d.Value = parseFloat(d.Value))
             console.log(filteredData)
-    
+            console.log(d3.extent(filteredData, d => d.Year))
           
             xScale.domain(d3.extent(filteredData, d=>d.Year));
             yScale.domain([0, parseFloat(d3.max(filteredData, d=>d.Value))])
