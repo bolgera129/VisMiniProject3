@@ -158,7 +158,7 @@ export default function LineChart(container,data) {
         .attr("y2", height)
         .style("stroke-width", 1)
         .style("stroke", "black")
-        .attr("class", "vline")
+        .attr("class", "tt")
         .style("fill", "none")
         .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
 
@@ -301,7 +301,6 @@ export default function LineChart(container,data) {
               d3.selectAll(".tt").remove()
             }
             function mousemove(e) {
-              d3.selectAll(".vline").remove()
               d3.selectAll(".tt").remove()
       
               var bisectYear = d3.bisector(function(d) { return d})
@@ -317,7 +316,7 @@ export default function LineChart(container,data) {
               .attr("y2", height)
               .style("stroke-width", 1)
               .style("stroke", "black")
-              .attr("class", "vline")
+              .attr("class", "tt")
               .style("fill", "none")
               .attr("transform", "translate(" + (margin.left - 10) + "," + (margin.top + 15) + ")")
       
