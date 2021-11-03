@@ -28,7 +28,7 @@ svg {
 .svg-map {
     display: block;
     margin: auto;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: 2px solid midnightblue;
 }
 
@@ -134,4 +134,9 @@ h4 {
 
 .myrec{
     border-radius: 2px;
+}
+
+.reset-button {
+    text-align: center;
+    margin: 12px;
 }

@@ -38,6 +38,10 @@ d3.csv("Threatened_species.csv", d3.autoType).then(data => {
             type = clicked
             lineChart.updateType(data, type, country)
         })
+
+        d3.select("#line-button").on("click", () => {
+            lineChart.updateCountry(data, country)
+        })
     })
 
 })
